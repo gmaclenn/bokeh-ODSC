@@ -20,8 +20,6 @@ p = figure(webgl=True)
 # create circle glyphs with latitude and longitude coordinates as x and y
 p.circle('x', 'y', source=sr_cds, alpha=0.75, size=6, hover_color='red', hover_alpha=1)
 
-# cr = p.circle('x', 'y', source=sr_cds, hover_color="firebrick")
-
 p.add_tile(CARTODBPOSITRON_RETINA)
 
 hover = HoverTool(tooltips=[('Source', '@source')])

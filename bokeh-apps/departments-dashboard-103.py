@@ -1,15 +1,12 @@
-# "current document" where all the the plots and layouts are held
-from bokeh.io import curdoc 
-
+from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, Select, HoverTool
 from bokeh.layouts import row
 from bokeh.tile_providers import CARTODBPOSITRON_RETINA
-
 import pandas as pd
 
 # read the dataset
-service_requests = pd.read_csv('datasets/department-sr-ao.csv', index_col=0)
+service_requests = pd.read_csv('../datasets/department-sr-ao.csv', index_col=0)
 
 # create a blank ColumnDataSource object
 source = ColumnDataSource(data=dict(x=[], y=[], dept=[], days_open=[]))
@@ -20,7 +17,7 @@ p = figure(webgl=True)
 
 # create a department drop down
 dept = Select(title="Departments", value="INFO",
-               options=['INFO', 'ISD', 'PWDx', 'BTDT', 'PARK', 'PROP', 'ANML'])
+              options=['INFO', 'ISD', 'PWDx', 'BTDT', 'PARK', 'PROP', 'ANML'])
 # create the hover tool
 hover = HoverTool(tooltips=[('Days Open', '@days_open')])
 
@@ -32,20 +29,25 @@ p.add_tools(hover)
 p.circle('x', 'y', source=source, alpha=0.8)
 
 # filter the DataFrame based on the Department Title
+
+
 def select_requests():
     dept_val = dept.value
     filtered_df = service_requests
-    filtered_df = filtered_df[filtered_df.Department.str.contains(dept_val)==True]
+    filtered_df = filtered_df[
+        filtered_df.Department.str.contains(dept_val) == True]
     return filtered_df
 
 # update the ColumnDataSource values based on the new filtered df
+
+
 def update():
     df = select_requests()
     source.data = dict(
         x=df['wm_x'],
         y=df['wm_y'],
-        dept = df['Department'],
-        days_open = df['days_open']
+        dept=df['Department'],
+        days_open=df['days_open']
     )
 
 dept.on_change('value', lambda attr, old, new: update())
