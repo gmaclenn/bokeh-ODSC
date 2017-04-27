@@ -1,25 +1,30 @@
-from bokeh.io import curdoc
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, Select, HoverTool, CategoricalColorMapper
-from bokeh.layouts import row, widgetbox, column
-from bokeh.tile_providers import CARTODBPOSITRON_RETINA
-from bokeh.palettes import Viridis3, Set1
-from bokeh.models.widgets import DataTable, TableColumn
 import pandas as pd
 
+from bokeh.io import curdoc
+from bokeh.layouts import row, widgetbox, column
+from bokeh.models import (
+    ColumnDataSource, Select, HoverTool, CategoricalColorMapper
+)
+from bokeh.models.widgets import DataTable, TableColumn
+from bokeh.plotting import figure
+from bokeh.tile_providers import CARTODBPOSITRON_RETINA
+
+
 # read the dataset
-service_requests = pd.read_csv('../datasets/department-sr-ao.csv', index_col=0)
+service_requests = pd.read_csv(
+    '../../datasets/department-sr-ao.csv', index_col=0)
 
 # create a blank ColumnDataSource object
-source = ColumnDataSource(data=dict(x=[], y=[], dept=[], days_open=[], status=[],
-                                    case_title=[], source=[], id=[], photo=[]))
+source = ColumnDataSource(
+    data={'x'=[], 'y'=[], 'dept'=[], 'days_open'=[], 'status'=[],
+          'case_title'=[], 'source'=[], 'id'=[], 'photo'=[]})
 
 # create the blank figure & use webgl to use GPU rendering in browser
 p = figure(webgl=True)
 
 # create a department drop down
-dept = Select(title="Departments", value="INFO",
-              options=['INFO', 'ISD', 'PWDx', 'BTDT', 'PARK', 'PROP', 'ANML'])
+dept = Select(title="Departments", value="INFO", options=[
+              'INFO', 'ISD', 'PWDx', 'BTDT', 'PARK', 'PROP', 'ANML'])
 
 # create the hover tool
 hover = HoverTool(tooltips=[
@@ -67,17 +72,16 @@ def select_requests():
 
 def update():
     df = select_requests()
-    source.data = dict(
-        x=df['wm_x'],
-        y=df['wm_y'],
-        dept=df['Department'],
-        days_open=df['days_open'],
-        status=df['OnTime_Status'],
-        title=df['CASE_TITLE'],
-        source=df['Source'],
-        id=df['CASE_ENQUIRY_ID'],
-        queue=df['QUEUE'],
-    )
+    source.data = {
+        'x' = df['wm_x'],
+        'y' = df['wm_y'],
+        'dept' = df['Department'],
+        'days_open' = df['days_open'],
+        'status' = df['OnTime_Status']
+        'title' = df['CASE_TITLE'],
+        'source' = df['Source'],
+        'id' = df['CASE_ENQUIRY_ID'],
+        'queue' = df['QUEUE']}
 
 dept.on_change('value', lambda attr, old, new: update())
 

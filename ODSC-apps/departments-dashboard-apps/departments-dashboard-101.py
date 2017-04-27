@@ -1,14 +1,17 @@
-from bokeh.io import curdoc
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, Select
-from bokeh.layouts import row
 import pandas as pd
 
+from bokeh.io import curdoc
+from bokeh.layouts import row
+from bokeh.models import ColumnDataSource, Select
+from bokeh.plotting import figure
+
+
 # read the dataset
-service_requests = pd.read_csv('../datasets/department-sr-ao.csv', index_col=0)
+service_requests = pd.read_csv(
+    '../../datasets/department-sr-ao.csv', index_col=0)
 
 # create a blank ColumnDataSource object
-source = ColumnDataSource(data=dict(x=[], y=[], dept=[]))
+source = ColumnDataSource(data={'x'=[], 'y'=[], 'dept'=[]})
 
 # create the blank figure
 p = figure()
@@ -35,11 +38,10 @@ def select_requests():
 
 def update():
     df = select_requests()
-    source.data = dict(
-        x=df['wm_x'],
-        y=df['wm_y'],
-        dept=df['Department']
-    )
+    source.data = {
+        'x' = df['wm_x'],
+        'y' = df['wm_y'],
+        'dept' = df['Department']}
 
 dept.on_change('value', lambda attr, old, new: update())
 
