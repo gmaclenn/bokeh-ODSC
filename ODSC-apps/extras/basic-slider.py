@@ -11,4 +11,3 @@ layout = widgetbox(slider)
 
 # Add the layout to the current document
 curdoc().add_root(layout)
-

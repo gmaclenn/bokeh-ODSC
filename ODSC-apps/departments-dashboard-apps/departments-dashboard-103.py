@@ -51,6 +51,7 @@ def update():
         'dept' = df['Department'],
         'days_open' = df['days_open']}
 
+
 dept.on_change('value', lambda attr, old, new: update())
 
 update()  # initial load of the data
