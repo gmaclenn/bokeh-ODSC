@@ -12,10 +12,11 @@ service_requests = pd.read_csv(
     '../../datasets/service-requests.csv', index_col=0)
 
 # convert to CDS format
-sr_cds = ColumnDataSource(data=dict(
-    x=[],
-    y=[],
-    source=[]))
+sr_cds = ColumnDataSource(data={
+    'x'=[],
+    'y'=[],
+    'source'=[],
+})
 
 # create the blank figure
 p = figure(webgl=True)
@@ -43,10 +44,10 @@ def select_data():
 
 def update_plot():
     df = select_data()
-    sr_cds.data = dict(
-        x=df['wm_x'],
-        y=df['wm_y'],
-        source=df['Source'])
+    sr_cds.data = {
+        'x' = df['wm_x'],
+        'y' = df['wm_y'],
+        'source' = df['Source']}
 
 menu.on_change('value', lambda attr, old, new: update_plot())
 

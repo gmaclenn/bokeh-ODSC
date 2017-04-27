@@ -9,10 +9,10 @@ service_requests = pd.read_csv(
     '../../datasets/service-requests.csv', index_col=0)
 
 # convert the x and y coordinates from the DataFrame to a CDS
-sr_cds = ColumnDataSource(data=dict(
-    x=service_requests['wm_x'],
-    y=service_requests['wm_y'],
-))
+sr_cds = ColumnDataSource(data={
+    'x'=service_requests['wm_x'],
+    'y'=service_requests['wm_y'],
+})
 
 # create the blank figure
 p = figure()
