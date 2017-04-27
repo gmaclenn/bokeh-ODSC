@@ -1,18 +1,18 @@
-# "current document" where all the the plots and layouts are held
-from bokeh.io import curdoc 
-
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource
 import pandas as pd
 
+from bokeh.io import curdoc
+from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure
+
 # read the dataset
-service_requests = pd.read_csv('../datasets/service-requests.csv', index_col=0)
+service_requests = pd.read_csv(
+    '../../datasets/service-requests.csv', index_col=0)
 
 # convert the x and y coordinates from the DataFrame to a CDS
 sr_cds = ColumnDataSource(data=dict(
-	x = service_requests['wm_x'], 
-	y = service_requests['wm_y'],
-	))
+    x=service_requests['wm_x'],
+    y=service_requests['wm_y'],
+))
 
 # create the blank figure
 p = figure()
