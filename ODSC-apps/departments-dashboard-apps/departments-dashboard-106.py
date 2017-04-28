@@ -3,7 +3,8 @@ import pandas as pd
 from bokeh.io import curdoc
 from bokeh.layouts import row, widgetbox, column
 from bokeh.models import (
-    ColumnDataSource, Select, HoverTool, CategoricalColorMapper
+    ColumnDataSource, Select, HoverTool, CategoricalColorMapper,
+    Slider
 )
 from bokeh.models.widgets import DataTable, TableColumn
 from bokeh.plotting import figure
@@ -16,8 +17,8 @@ service_requests = pd.read_csv(
 
 # create a blank ColumnDataSource object
 source = ColumnDataSource(
-    data={'x':[], 'y':[], 'dept':[], 'days_open':[], 'status':[],
-          'case_title':[], 'source':[], 'id':[], 'photo':[]})
+    data={'x': [], 'y': [], 'dept': [], 'days_open': [], 'status': [],
+          'case_title': [], 'source': [], 'id': [], 'photo': []})
 
 # create the blank figure & use webgl to use GPU rendering in browser
 p = figure(webgl=True)
@@ -25,6 +26,16 @@ p = figure(webgl=True)
 # create a department drop down
 dept = Select(title="Departments", value="INFO", options=[
               'INFO', 'ISD', 'PWDx', 'BTDT', 'PARK', 'PROP', 'ANML'])
+
+max_days_open = service_requests['days_open'].max()
+
+# round down to the nearest 100 to ensure there is always at least one point
+max_number_100 = max_days_open - (max_days_open % 100)
+
+# create a slider
+days_slider = Slider(title='# of days open', value=0,
+                     start=0, end=max_number_100, step=100)
+
 
 # create the hover tool
 hover = HoverTool(tooltips=[
@@ -62,7 +73,9 @@ p.circle('x', 'y', source=source, alpha=0.8, color={
 
 def select_requests():
     dept_val = dept.value
-    filtered_df = service_requests
+    filtered_df = service_requests[
+        (service_requests['days_open'] >= days_slider.value)
+    ]
     filtered_df = filtered_df[
         filtered_df.Department.str.contains(dept_val) == True]
     return filtered_df
@@ -73,22 +86,23 @@ def select_requests():
 def update():
     df = select_requests()
     source.data = {
-        'x' : df['wm_x'],
-        'y' : df['wm_y'],
-        'dept' : df['Department'],
-        'days_open' : df['days_open'],
-        'status' : df['OnTime_Status'],
-        'title' : df['CASE_TITLE'],
-        'source' : df['Source'],
-        'id' : df['CASE_ENQUIRY_ID'],
-        'queue' : df['QUEUE']}
+        'x': df['wm_x'],
+        'y': df['wm_y'],
+        'dept': df['Department'],
+        'days_open': df['days_open'],
+        'status': df['OnTime_Status'],
+        'title': df['CASE_TITLE'],
+        'source': df['Source'],
+        'id': df['CASE_ENQUIRY_ID'],
+        'queue': df['QUEUE']}
 
 dept.on_change('value', lambda attr, old, new: update())
+days_slider.on_change('value', lambda attr, old, new: update())
 
 update()  # initial load of the data
 
 # create a layout with one row
-layout = row(p, column(widgetbox(dept, data_table)))
+layout = row(p, column(widgetbox(dept, days_slider, data_table)))
 
 # add the layout to the current document
 curdoc().add_root(layout)

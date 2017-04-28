@@ -11,8 +11,8 @@ service_requests = pd.read_csv(
 
 # convert it to a ColumnDataSource
 sr_cds = ColumnDataSource(data={
-    'x'=service_requests['wm_x'],
-    'y'=service_requests['wm_y'],
+    'x':service_requests['wm_x'],
+    'y':service_requests['wm_y'],
 })
 
 # create the blank figure

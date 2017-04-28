@@ -11,7 +11,7 @@ service_requests = pd.read_csv(
     '../../datasets/department-sr-ao.csv', index_col=0)
 
 # create a blank ColumnDataSource object
-source = ColumnDataSource(data={'x'=[], 'y'=[], 'dept'=[], 'days_open'=[]})
+source = ColumnDataSource(data={'x':[], 'y':[], 'dept':[], 'days_open':[]})
 
 # create the blank figure & use webgl to use GPU rendering in browser
 p = figure(webgl=True)
@@ -46,10 +46,10 @@ def select_requests():
 def update():
     df = select_requests()
     source.data = {
-        'x' = df['wm_x'],
-        'y' = df['wm_y'],
-        'dept' = df['Department'],
-        'days_open' = df['days_open']}
+        'x' : df['wm_x'],
+        'y' : df['wm_y'],
+        'dept' : df['Department'],
+        'days_open' : df['days_open']}
 
 
 dept.on_change('value', lambda attr, old, new: update())

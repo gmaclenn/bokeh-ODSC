@@ -11,7 +11,7 @@ service_requests = pd.read_csv(
     '../../datasets/department-sr-ao.csv', index_col=0)
 
 # create a blank ColumnDataSource object
-source = ColumnDataSource(data={'x'=[], 'y'=[], 'dept'=[]})
+source = ColumnDataSource(data={'x':[], 'y':[], 'dept':[]})
 
 # create the blank figure
 p = figure()
@@ -39,9 +39,9 @@ def select_requests():
 def update():
     df = select_requests()
     source.data = {
-        'x' = df['wm_x'],
-        'y' = df['wm_y'],
-        'dept' = df['Department']}
+        'x' : df['wm_x'],
+        'y' : df['wm_y'],
+        'dept' : df['Department']}
 
 dept.on_change('value', lambda attr, old, new: update())
 

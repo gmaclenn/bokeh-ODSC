@@ -12,8 +12,8 @@ service_requests = pd.read_csv(
 
 # convert to CDS format
 sr_cds = ColumnDataSource(data={
-    'x'=[],
-    'y'=[],
+    'x':[],
+    'y':[],
 })
 
 # create the blank figure
@@ -36,8 +36,8 @@ def select_data():
 def update_plot():
     df = select_data()
     sr_cds.data = {
-        'x' = df['wm_x'],
-        'y' = df['wm_y']}
+        'x' : df['wm_x'],
+        'y' : df['wm_y']}
 
 menu.on_change('value', lambda attr, old, new: update_plot())
 
